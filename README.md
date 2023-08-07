@@ -1,6 +1,6 @@
-# yesDB
 
-![yesdb](/logo/yesdb.png)
+
+![yesdb](/logo/yesdb2.png)
 
 - A storage engine for learning
 
@@ -10,6 +10,13 @@
 * Predictable read/write performance
 * Low latency
 * High throughput
+## How To Install
+```
+mkdir build 
+cd build
+cmake .. 
+make -j `nproc`
+```
 ## DONE
 - Open()
 ## TODO
