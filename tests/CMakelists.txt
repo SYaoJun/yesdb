@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
-project(catch_test)
-set(CMAKE_CXX_STANDARD 14)
-add_executable(catch_test yesdb.cpp catch.hpp)
+include_directories(../third_party/catch)
+add_executable(catch_test yesdb.cpp)
+
+add_executable(open_test open.cpp)

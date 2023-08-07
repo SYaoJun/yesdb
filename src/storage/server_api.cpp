@@ -18,7 +18,6 @@ Yesdb::~Yesdb() {}
 
 
 bool Yesdb::Open() {
-    // C语言和C++混用好不好
         fd_ =open("D:\\a.txt",O_RDWR);
  
         if(fd_==-1){
