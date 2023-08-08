@@ -1,1 +1,21 @@
+add_subdirectory(utils)
 add_subdirectory(storage)
+# 生成静态库
+add_library(yesdb STATIC ${ALL_OBJECT_FILES})
+
+# set(YESDB_LIBS
+#         yesdb_utils
+#         )
+
+find_package(Threads REQUIRED)
+# 这里不用引入gtest
+set(YESDB_THIRDPARTY_LIBS
+        Threads::Threads
+        )
+target_link_libraries(
+        yesdb
+        ${YESDB_LIBS}
+        ${YESDB_THIRDPARTY_LIBS}
+        )
+add_executable(yesdb_server main.cpp)
+target_link_libraries(yesdb_server yesdb)

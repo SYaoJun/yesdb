@@ -1,5 +1,12 @@
-# include_directories(../third_party/catch)
-include_directories(../src/include)
-add_executable(main main.cpp)
+# cmake_minimum_required(VERSION 3.16)
 
-add_executable(open_test open.cpp)
+# include(GoogleTest)
+
+# file(GLOB_RECURSE YESDB_TEST_SOURCES "${PROJECT_SOURCE_DIR}/test/*test.cpp")
+
+# string(REPLACE ".cpp" "" SRC_FILE_NAME "${YESDB_TEST_SOURCES}" )
+
+# foreach(yesdb_test_name ${SRC_FILE_NAME} )
+#     add_executable( ${yesdb_test_name} ${yesdb_test_name}.cpp )
+#     target_link_libraries(${yesdb_test_name} yesdb gtest gmock_main)
+# endforeach()

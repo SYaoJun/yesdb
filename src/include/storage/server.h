@@ -1,5 +1,3 @@
-#pragma once
-
 #include <cstddef>
 #include <filesystem>
 #include <fstream>
@@ -9,7 +7,16 @@
 #include <unordered_map>
 #include <utility>
 #include <string>
-
+#include <fcntl.h>
+#include <ctime>
+#include <filesystem>
+#include <fstream>
+#include <unordered_set>
+#include <iostream>
+#include <unistd.h>
+#include <sys/types.h>    
+#include <sys/stat.h>    
+#include <fcntl.h>
 namespace yesdb
 {
     class Entry
@@ -29,7 +36,7 @@ namespace yesdb
         void Close();
         // 插入
         bool Put(const char *key, const char *value);
-        char *Get(const char *key);
+        bool Get(const char *key, char *value);
 
     private:
         std::string filename_;

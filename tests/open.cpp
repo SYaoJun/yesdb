@@ -7,10 +7,13 @@
 using namespace yesdb;
 
 int main(){
-    Yesdb yesdb("hello.db");
-    const char* key =  "yaojun";
-    const char* value = "2023-hello-world";
-    bool ret = yesdb.Put(key, value);
-    std::cout<<ret<<std::endl;
+    // Yesdb yesdb("hello.db");
+    // yesdb.Open();
+    // const char key[] = "RUNOOB";
+    // const char value[] = "2023-hello-world";
+    // std::string hello = "hello";
+    // bool ret = yesdb.Put(key, value);
+    // std::cout<<ret<<std::endl;
+    std::cout<<"hello open"<<std::endl;
     // REQUIRE(ret == true);
 }
