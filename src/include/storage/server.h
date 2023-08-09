@@ -33,17 +33,20 @@ namespace yesdb
         Yesdb(std::string filename);
         ~Yesdb();
         bool Open();
-        void Close();
+        bool Close();
         // 插入
-        bool Put(const char *key, const char *value);
-        bool Get(const char *key, char *value);
+        bool Put(const std::string key, const std::string value);
+        bool Get(const std::string key, std::string &value);
+        bool Flush();
+        bool Sync();
 
     private:
         std::string filename_;
         int fd_;
-        std::unordered_map<uint64_t, Entry> key_dir;          // 使用art作为key目录查询
-        std::unordered_map<uint64_t, std::string> open_files; // key-->File
-        uint64_t active_file_id;                              // 活跃的文件
+        std::string data_;
+        std::unordered_map<uint64_t, Entry> key_dir;          
+        std::unordered_map<uint64_t, std::string> open_files; 
+        uint64_t active_file_id;                              
         size_t size;
         bool is_opened;
         uint32_t offset_;
