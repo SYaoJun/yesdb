@@ -6,10 +6,19 @@ project(yesdb
         )
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BUILD_TYPE RELESE)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# static library
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib)
+# shared library
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_LIST_DIR}/bin)
+# executable file
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+
+# install directory
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
-# Includes.
+
+# public header
 set(BUSTUB_SRC_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src/include)
 set(BUSTUB_THIRD_PARTY_INCLUDE_DIR
         ${PROJECT_SOURCE_DIR}/third_party
@@ -17,9 +26,6 @@ set(BUSTUB_THIRD_PARTY_INCLUDE_DIR
         )
 
 include_directories(${BUSTUB_SRC_INCLUDE_DIR} ${BUSTUB_THIRD_PARTY_INCLUDE_DIR})
-include_directories(BEFORE src) # This is needed for gtest.
-
-
 
 add_subdirectory(src)
 add_subdirectory(tests)

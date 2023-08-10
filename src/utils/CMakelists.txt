@@ -4,8 +4,6 @@ add_library(
     time.cpp
     )
 
-# target_include_directories(yesdb_utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-# 为什么使用对象编译时，无法获取到头文件
 set(ALL_OBJECT_FILES
     ${ALL_OBJECT_FILES} $<TARGET_OBJECTS:yesdb_utils>
     PARENT_SCOPE)
