@@ -5,16 +5,18 @@
 - A storage engine for study
 
 ## Features
-- Write
-- Read
-- Compression
-- Serialize
+* Builtin server (`yesdb-server`)
+* Predictable read/write performance
+* Low latency
+* High throughput
 
 ## Dependency
 * [Catch2](https://github.com/catchorg/Catch2)
 * [CRC32](https://github.com/google/crc32c)
 * [Zstd](https://github.com/facebook/zstd)
-
+* [Picobench](https://github.com/iboB/picobench)
+* [Adaptive Radix Tree](https://github.com/rafaelkallis/adaptive-radix-tree)
+* [Plog](https://github.com/SergiusTheBest/plog)
 ## How to Run
 ```
 cd yesdb
@@ -31,10 +33,17 @@ cmake --build build
 */
 ```
 ## TODO 2023.8
-- Serialize()
-- Deserialize()
 - Wal
-- Compression
-- Cache
 - Index
 - Recovery
+## Done 
+- Read
+- Write
+- Serialize
+- Deserialize
+- Compress
+- Decompress
+- DBServer
+- Log
+- ART
+- Benchmark

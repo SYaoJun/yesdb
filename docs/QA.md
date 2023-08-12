@@ -3,3 +3,4 @@
 ## the index and key_dir need reload when the server restart
 ## how to use the index?
 ## char data not equals to string data
+## curl http://0.0.0.0:18080/test

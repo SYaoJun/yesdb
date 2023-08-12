@@ -22,5 +22,5 @@ target_link_libraries(
 )
 
 
-#add_executable(yesdb_server main.cpp)
-#target_link_libraries(yesdb PRIVATE yesdb)
+add_executable(yesdb_server main.cpp)
+target_link_libraries(yesdb_server PRIVATE yesdb)
