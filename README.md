@@ -8,6 +8,7 @@
 - Write
 - Read
 - Compression
+- Serialize
 
 ## Dependency
 * [Catch2](https://github.com/catchorg/Catch2)
