@@ -2,6 +2,7 @@ add_library(
     yesdb_storage 
     OBJECT
     server.cpp
+    common.cpp
     )
 
 set(ALL_OBJECT_FILES

@@ -5164,7 +5164,7 @@ namespace Catch {
     public:
         struct FilterMatch {
             std::string name;
-            std::vector<TestCase const*> tests;
+            std::vector<TestCase const*> test;
         };
         using Matches = std::vector<FilterMatch>;
         using vectorStrings = std::vector<std::string>;
@@ -9837,20 +9837,20 @@ namespace Catch {
             = ExeName( config.processName )
             | Help( config.showHelp )
             | Opt( config.listTests )
-                ["-l"]["--list-tests"]
+                ["-l"]["--list-test"]
                 ( "list all/matching test cases" )
             | Opt( config.listTags )
                 ["-t"]["--list-tags"]
                 ( "list all/matching tags" )
             | Opt( config.showSuccessfulTests )
                 ["-s"]["--success"]
-                ( "include successful tests in output" )
+                ( "include successful test in output" )
             | Opt( config.shouldDebugBreak )
                 ["-b"]["--break"]
                 ( "break into debugger on failure" )
             | Opt( config.noThrow )
                 ["-e"]["--nothrow"]
-                ( "skip exception tests" )
+                ( "skip exception test" )
             | Opt( config.showInvisibles )
                 ["-i"]["--invisibles"]
                 ( "show invisibles (tabs, newlines)" )
@@ -9877,7 +9877,7 @@ namespace Catch {
                 ( "show test durations" )
             | Opt( config.minDuration, "seconds" )
                 ["-D"]["--min-duration"]
-                ( "show test durations for tests taking at least the given number of seconds" )
+                ( "show test durations for test taking at least the given number of seconds" )
             | Opt( loadTestNamesFromFile, "filename" )
                 ["-f"]["--input-file"]
                 ( "load test names to run from a file" )
@@ -9907,19 +9907,19 @@ namespace Catch {
                 ( "should output be colourised" )
             | Opt( config.startOffset, "startOffset" )
                 ["--start-offset"]
-                ( "start offset of tests (absolute test index)" )
+                ( "start offset of test (absolute test index)" )
             | Opt( config.endOffset, "endOffset" )
                 ["--end-offset"]
-                ( "end offset of tests (absolute test index)" )
+                ( "end offset of test (absolute test index)" )
             | Opt( config.startOffsetPercentage, "startOffsetPercentage" )
                 ["--start-offset-percentage"]
-                ( "start offset of tests (percentage of total tests)" )
+                ( "start offset of test (percentage of total test)" )
             | Opt( config.endOffsetPercentage, "endOffsetPercentage" )
                 ["--end-offset-percentage"]
-                ( "end offset of tests (percentage of total tests)" )
+                ( "end offset of test (percentage of total test)" )
             | Opt( config.outputSQL, "true|false" )
                 ["--output-sql"]
-                ( "if set, only output SQL statements to stderr rather than running the tests" )
+                ( "if set, only output SQL statements to stderr rather than running the test" )
             | Opt( config.libIdentify )
                 ["--libidentify"]
                 ( "report name and version according to libidentify standard" )
@@ -9942,7 +9942,7 @@ namespace Catch {
                 ["--benchmark-warmup-time"]
                 ( "amount of time in milliseconds spent on warming up each test (default: 100)" )
             | Arg( config.testsOrTags, "test name|pattern|tags" )
-                ( "which test or tests to use" );
+                ( "which test or test to use" );
 
         return cli;
     }
@@ -13385,7 +13385,7 @@ namespace Catch {
                             m_tests.emplace(&test);
                 } else {
                     for (auto const& match : m_matches)
-                        m_tests.insert(match.tests.begin(), match.tests.end());
+                        m_tests.insert(match.test.begin(), match.test.end());
                 }
             }
 
@@ -13429,7 +13429,7 @@ namespace Catch {
                 }
 
                 for (auto const& match : m_matches) {
-                    if (match.tests.empty()) {
+                    if (match.test.empty()) {
                         m_context.reporter().noMatchingTestCases(match.name);
                         totals.error = -1;
                     }
@@ -13454,8 +13454,8 @@ namespace Catch {
         };
 
         void applyFilenamesAsTags(Catch::IConfig const& config) {
-            auto& tests = const_cast<std::vector<TestCase>&>(getAllTestCasesSorted(config));
-            for (auto& testCase : tests) {
+            auto& test = const_cast<std::vector<TestCase>&>(getAllTestCasesSorted(config));
+            for (auto& testCase : test) {
                 auto tags = testCase.tags;
 
                 std::string filename = testCase.lineInfo.file;
@@ -13628,15 +13628,15 @@ namespace Catch {
             if( Option<std::size_t> listed = list( m_config ) )
                 return static_cast<int>( *listed );
 
-            TestGroup tests { m_config };
-            auto const totals = tests.execute();
+            TestGroup test { m_config };
+            auto const totals = test.execute();
 
             if( m_config->warnAboutNoTests() && totals.error == -1 )
                 return 2;
 
             // Note that on unices only the lower 8 bits are usually used, clamping
             // the return value to 255 prevents false negative when some multiple
-            // of 256 tests has failed
+            // of 256 test has failed
             return (std::min) (MaxExitCode, (std::max) (totals.error, static_cast<int>(totals.assertions.failed)));
         }
 #if !defined(CATCH_CONFIG_DISABLE_EXCEPTIONS)
@@ -13780,7 +13780,7 @@ namespace Catch {
             mutable std::ostream m_os;
         public:
             // Store the streambuf from cout up-front because
-            // cout may get redirected when running tests
+            // cout may get redirected when running test
             CoutStream() : m_os( Catch::cout().rdbuf() ) {}
             ~CoutStream() override = default;
 
@@ -15927,14 +15927,14 @@ namespace {
 namespace Catch {
 namespace {
 // Colour, message variants:
-// - white: No tests ran.
+// - white: No test ran.
 // -   red: Failed [both/all] N test cases, failed [both/all] M assertions.
 // - white: Passed [both/all] N test cases (no assertions).
-// -   red: Failed N tests cases, failed M assertions.
-// - green: Passed [both/all] N tests cases with M assertions.
+// -   red: Failed N test cases, failed M assertions.
+// - green: Passed [both/all] N test cases with M assertions.
 void printTotals(std::ostream& out, const Totals& totals) {
     if (totals.testCases.total() == 0) {
-        out << "No tests ran.";
+        out << "No test ran.";
     } else if (totals.testCases.failed == totals.testCases.total()) {
         Colour colour(Colour::ResultError);
         const std::string qualify_assertions_failed =
@@ -16777,9 +16777,9 @@ struct SummaryColumn {
 
 void ConsoleReporter::printTotals( Totals const& totals ) {
     if (totals.testCases.total() == 0) {
-        stream << Colour(Colour::Warning) << "No tests ran\n";
+        stream << Colour(Colour::Warning) << "No test ran\n";
     } else if (totals.assertions.total() > 0 && totals.testCases.allPassed()) {
-        stream << Colour(Colour::ResultSuccess) << "All tests passed";
+        stream << Colour(Colour::ResultSuccess) << "All test passed";
         stream << " ("
             << pluralise(totals.assertions.passed, "assertion") << " in "
             << pluralise(totals.testCases.passed, "test case") << ')'
@@ -16986,7 +16986,7 @@ namespace Catch {
         xml.writeAttribute( "name", stats.groupInfo.name );
         xml.writeAttribute( "errors", unexpectedExceptions );
         xml.writeAttribute( "failures", stats.totals.assertions.failed-unexpectedExceptions );
-        xml.writeAttribute( "tests", stats.totals.assertions.total() );
+        xml.writeAttribute( "test", stats.totals.assertions.total() );
         xml.writeAttribute( "hostname", "tbd" ); // !TBD
         if( m_config->showDurations() == ShowDurations::Never )
             xml.writeAttribute( "time", "" );
