@@ -18,6 +18,7 @@
 
 ## How to Run
 ```
+cd yesdb
 cmake -B build
 cmake --build build
 ./test/server_test
