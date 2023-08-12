@@ -39,7 +39,8 @@ namespace yesdb {
         bool Get(const std::string key, std::string &value);
         bool Flush();
         bool Sync();
-
+        bool Compress(const std::string org_data, std::vector<char> &cmpr_data,int &cmpr_size);
+        bool Decompress(std::vector<char> &cmpr_data, std::string &decmpr_data, const int cmpr_size, const int org_size);
     private:
         std::string filename_;
         int fd_;
@@ -52,5 +53,6 @@ namespace yesdb {
         bool ReadData(Entry entry, std::string &value);
         bool Serialize();
         bool Deserialize();
+
     };
 } // namespace yesdb

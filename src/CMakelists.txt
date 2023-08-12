@@ -8,17 +8,17 @@ set(YESDB_LIBS
         )
 
 find_package(Threads REQUIRED)
-find_library(CRC_LIBS
-        NAMES crc32c
-        PATHS /urs/local/lib
-        REQUIRED)
-
+# crc32c
+find_library(CRC_LIBS NAMES crc32c PATHS /urs/local/lib REQUIRED)
+# zstd
+find_library(ZSTD_LIBS zstd /opt/homebrew/Cellar/zstd/1.5.5/lib REQUIRED)
 
 target_link_libraries(
         yesdb
         ${YESDB_LIBS}
         Threads::Threads
         ${CRC_LIBS}
+        ${ZSTD_LIBS}
 )
 
 

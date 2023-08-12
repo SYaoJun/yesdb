@@ -1,6 +1,8 @@
 
 #include "server.h"
 #include "common.h"
+#include "zstd.h"
+#include <vector>
 /*
 * +-------+--------+--------+----------+-----+-------+
 * | crc32 | tstamp | key_sz | value_sz | key | value |
@@ -131,7 +133,7 @@ namespace yesdb {
                 printf("read %d bytes.\n", n);
                 printf("buffer = %s\n", buffer);
                 value = std::string(buffer);
-                std::cout <<value<<std::endl;
+                std::cout << value << std::endl;
                 return true;
             }
         }
@@ -143,6 +145,71 @@ namespace yesdb {
 
     bool Yesdb::Deserialize() {
         return false;
+    }
+
+    bool Yesdb::Compress(const std::string originalData,
+                         std::vector<char> &cmpr_data,
+                         int &cmpr_size) {
+        // 原始数据
+//    std::string originalData = "Hello, this is some data to be compressed using Zstandard.";
+
+        // 压缩
+        size_t compressedBufferSize = ZSTD_compressBound(
+                originalData.size()); // 估算压缩后的缓冲区大小
+        std::vector<char> compressedBuffer(compressedBufferSize);
+
+        size_t compressedSize = ZSTD_compress(
+                compressedBuffer.data(), compressedBuffer.size(),
+                originalData.data(), originalData.size(),
+                ZSTD_maxCLevel()
+        );
+        if (ZSTD_isError(compressedSize)) {
+            std::cerr << "Compression error: "
+                      << ZSTD_getErrorName(compressedSize) << std::endl;
+            return false;
+        }
+cmpr_data = compressedBuffer;
+        cmpr_size = compressedSize;
+
+        // 解压缩
+//    std::vector<char> decompressedBuffer(originalData.size());
+//    size_t decompressedSize = ZSTD_decompress(
+//        decompressedBuffer.data(), decompressedBuffer.size(),
+//        compressedBuffer.data(), compressedSize
+//    );
+//
+//    if (ZSTD_isError(decompressedSize)) {
+//        std::cerr << "Decompression error: " << ZSTD_getErrorName(decompressedSize) << std::endl;
+//        return false;
+//    }
+//
+//    // 打印结果
+//    std::cout << "Original data: " << originalData << std::endl;
+//    std::cout << "Compressed data size: " << compressedSize << std::endl;
+//    std::cout << "Decompressed data: " << decompressedBuffer.data() << std::endl;
+//        return true;
+        return true;
+    }
+
+    bool
+    Yesdb::Decompress(std::vector<char> &cmpr_data, std::string &decmpr_data,
+                      const int cmpr_size, const int org_size) {
+        std::vector<char> decompressedBuffer(org_size);
+        size_t decompressedSize = ZSTD_decompress(
+                decompressedBuffer.data(), decompressedBuffer.size(),
+                cmpr_data.data(), cmpr_size
+        );
+
+        if (ZSTD_isError(decompressedSize)) {
+            std::cerr << "Decompression error: "
+                      << ZSTD_getErrorName(decompressedSize) << std::endl;
+            return false;
+        }
+
+        // 打印结果
+
+        decmpr_data = std::move(decompressedBuffer.data());
+        return true;
     }
 
 } // namespace yesdb

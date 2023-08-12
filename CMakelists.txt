@@ -27,6 +27,9 @@ set(BUSTUB_THIRD_PARTY_INCLUDE_DIR
 
 include_directories(${BUSTUB_SRC_INCLUDE_DIR} ${BUSTUB_THIRD_PARTY_INCLUDE_DIR})
 include_directories(/usr/local/include)
+# zstd include
+include_directories(/opt/homebrew/Cellar/zstd/1.5.5/include)
+
 #include(CheckLibraryExists)
 #check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
 #check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)

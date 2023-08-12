@@ -5,11 +5,9 @@
 - A storage engine for study
 
 ## Features
-
-* Embeddedable library `yesdb`
-* Predictable read/write performance
-* Low latency
-* High throughput
+- Write
+- Read
+- Compression
 
 ## Dependency
 * [Catch2](https://github.com/catchorg/Catch2)
