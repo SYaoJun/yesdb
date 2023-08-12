@@ -2,9 +2,9 @@
 #include "server.h"
 #include "common.h"
 /*
-* +-------+--------+--------+----------+-----+-------+--------+
-* | crc32 | tstamp | key_sz | value_sz | key | value | offset |
-* +-------+--------+--------+----------+-----+-------+--------+
+* +-------+--------+--------+----------+-----+-------+
+* | crc32 | tstamp | key_sz | value_sz | key | value |
+* +-------+--------+--------+----------+-----+-------+
 */
 namespace yesdb {
     Yesdb::Yesdb(std::string filename) : filename_(filename) {}
