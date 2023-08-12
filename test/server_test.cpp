@@ -15,7 +15,7 @@ TEST_CASE("test_yesdb_write_and_read", "yesdb.db"){
      std::string ret_value;
      ret = yesdb.Get(key, ret_value);
      REQUIRE(ret == true);
-//     REQUIRE(value == ret_value);
+     REQUIRE(value == ret_value);
      yesdb.Close();
 }
 

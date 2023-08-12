@@ -56,11 +56,18 @@ namespace yesdb {
         new_pos += uint32_sz;
         memcpy(sup_buffer + new_pos, buffer, pos);
         new_pos += pos;
-//        printf("sup_buffer = %s\n", sup_buffer);
-
+        /*
+        std::cout << "<=================" << std::endl;
+        std::cout << "checksum = " << checksum << std::endl;
+        std::cout << "tstam = " << tstamp << std::endl;
+        std::cout << "key_sz = " << key_sz << std::endl;
+        std::cout << "value_sz = " << value_sz << std::endl;
+        std::cout << "key = " << key << std::endl;
+        std::cout << "value = " << value << std::endl;
+        std::cout << "<=================" << std::endl;
+         */
         lseek(fd_, offset_, SEEK_SET);
         int ret = write(fd_, sup_buffer, new_pos);
-        printf("offset = %d, write size =  %d\n", offset_, new_pos);
         if (ret < 0) {
             printf("write failed.\n");
             return false;
@@ -101,7 +108,6 @@ namespace yesdb {
     }
 
     bool Yesdb::Sync() {
-//        Flush();
         int ret = fsync(fd_);
         return ret == -1 ? false : true;
     }
@@ -131,9 +137,43 @@ namespace yesdb {
             }
             if (n > 0) {
                 printf("read %d bytes.\n", n);
-                printf("buffer = %s\n", buffer);
-                value = std::string(buffer);
-                std::cout << value << std::endl;
+                // deserialize
+                int pos = 0;
+                uint32_t tstamp;
+                uint32_t uint32_sz = sizeof(uint32_t);
+                uint32_t checksum;
+                memcpy(&checksum, buffer + pos, uint32_sz);
+                pos += uint32_sz;
+                memcpy(&tstamp, buffer + pos, uint32_sz);
+                pos += uint32_sz;
+                uint32_t key_sz, value_sz;
+                memcpy(&key_sz, buffer + pos, uint32_sz);
+                pos += uint32_sz;
+                memcpy(&value_sz, buffer + pos, uint32_sz);
+                pos += uint32_sz;
+
+
+                std::string key;
+                char temp_key[BUFSIZ];
+                char temp_value[BUFSIZ];
+                memcpy(temp_key, buffer + pos, key_sz);
+                pos += key_sz;
+                memcpy(temp_value, buffer + pos, value_sz);
+                pos += value_sz;
+                /*
+                std::cout << "=================>" << std::endl;
+                std::cout << "checksum = " << checksum << std::endl;
+                std::cout << "tstam = " << tstamp << std::endl;
+                std::cout << "key_sz = " << key_sz << std::endl;
+                std::cout << "value_sz = " << value_sz << std::endl;
+                std::cout << "key = " << std::string(temp_key) << std::endl;
+                std::cout << "value = " << std::string(temp_value) << std::endl;
+                std::cout << "=================>" << std::endl;
+                 */
+                uint32_t new_checksum = crc32_checksum(buffer + uint32_sz,
+                                                       pos - uint32_sz);
+                assert(new_checksum == checksum);
+                value = std::string(temp_value);
                 return true;
             }
         }
@@ -150,10 +190,6 @@ namespace yesdb {
     bool Yesdb::Compress(const std::string originalData,
                          std::vector<char> &cmpr_data,
                          int &cmpr_size) {
-        // 原始数据
-//    std::string originalData = "Hello, this is some data to be compressed using Zstandard.";
-
-        // 压缩
         size_t compressedBufferSize = ZSTD_compressBound(
                 originalData.size()); // 估算压缩后的缓冲区大小
         std::vector<char> compressedBuffer(compressedBufferSize);
@@ -168,26 +204,8 @@ namespace yesdb {
                       << ZSTD_getErrorName(compressedSize) << std::endl;
             return false;
         }
-cmpr_data = compressedBuffer;
+        cmpr_data = compressedBuffer;
         cmpr_size = compressedSize;
-
-        // 解压缩
-//    std::vector<char> decompressedBuffer(originalData.size());
-//    size_t decompressedSize = ZSTD_decompress(
-//        decompressedBuffer.data(), decompressedBuffer.size(),
-//        compressedBuffer.data(), compressedSize
-//    );
-//
-//    if (ZSTD_isError(decompressedSize)) {
-//        std::cerr << "Decompression error: " << ZSTD_getErrorName(decompressedSize) << std::endl;
-//        return false;
-//    }
-//
-//    // 打印结果
-//    std::cout << "Original data: " << originalData << std::endl;
-//    std::cout << "Compressed data size: " << compressedSize << std::endl;
-//    std::cout << "Decompressed data: " << decompressedBuffer.data() << std::endl;
-//        return true;
         return true;
     }
 
@@ -205,9 +223,6 @@ cmpr_data = compressedBuffer;
                       << ZSTD_getErrorName(decompressedSize) << std::endl;
             return false;
         }
-
-        // 打印结果
-
         decmpr_data = std::move(decompressedBuffer.data());
         return true;
     }
