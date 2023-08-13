@@ -3,6 +3,7 @@
 #include "common.h"
 #include "zstd.h"
 #include <vector>
+#include <plog/Log.h>
 /*
 * +-------+--------+--------+----------+-----+-------+
 * | crc32 | tstamp | key_sz | value_sz | key | value |
@@ -16,18 +17,17 @@ namespace yesdb {
     bool Yesdb::Open() {
         fd_ = open(filename_.data(), O_RDWR | O_CREAT);
         if (fd_ == -1) {
-            printf("can not open the file\n");
+            PLOG_DEBUG << "can not open the file\n";
             return false;
         }
-
-        printf("successful to open the file\n");
+        PLOG_DEBUG << "successful to open the file\n";
         offset_ = 0;
         return true;
     }
 
     bool Yesdb::Put(const std::string key, const std::string value) {
         if (fd_ == -1) {
-            printf("file don't open.\n");
+            PLOG_DEBUG << "file don't open.\n";
             return false;
         }
         std::unique_lock lock(mutex);
@@ -56,20 +56,10 @@ namespace yesdb {
         new_pos += uint32_sz;
         memcpy(sup_buffer + new_pos, buffer, pos);
         new_pos += pos;
-        /*
-        std::cout << "<=================" << std::endl;
-        std::cout << "checksum = " << checksum << std::endl;
-        std::cout << "tstam = " << tstamp << std::endl;
-        std::cout << "key_sz = " << key_sz << std::endl;
-        std::cout << "value_sz = " << value_sz << std::endl;
-        std::cout << "key = " << key << std::endl;
-        std::cout << "value = " << value << std::endl;
-        std::cout << "<=================" << std::endl;
-         */
         lseek(fd_, offset_, SEEK_SET);
         int ret = write(fd_, sup_buffer, new_pos);
         if (ret < 0) {
-            printf("write failed.\n");
+            PLOG_DEBUG << "write failed.\n";
             return false;
         }
 
@@ -85,12 +75,12 @@ namespace yesdb {
 
     bool Yesdb::Get(const std::string key, std::string &value) {
         if (fd_ == -1) {
-            printf("file don't open.\n");
+            PLOG_DEBUG << "file don't open.\n";
             return false;
         }
 
         if (key_dir.find(key) == key_dir.end()) {
-            printf("db don't exist the key = %s.\n", key.data());
+            PLOG_DEBUG << str_format("db don't exist the key = %s.\n", key.data());
             return false;
         }
         Entry entry = key_dir[key];
@@ -100,10 +90,10 @@ namespace yesdb {
     bool Yesdb::Flush() {
         int res = write(fd_, data_.data(), data_.size());
         if (res == -1) {
-            printf("write error");
+            PLOG_DEBUG << "write error";
             return false;
         }
-        printf("success write %d bytes\n", res);
+        PLOG_DEBUG << str_format("success write %d bytes\n", res);
         return true;
     }
 
@@ -119,13 +109,12 @@ namespace yesdb {
 
     bool Yesdb::ReadData(Entry entry, std::string &value) {
         if (entry.fd_ == -1) {
-            printf("file don't open.\n");
+            PLOG_DEBUG << "file don't open.\n";
             return false;
         }
         char buffer[BUFSIZ];
 
         while (true) {
-            printf("lseek before read %d\n", entry.offset_);
             lseek(entry.fd_, entry.offset_, SEEK_SET);
             memset(buffer, 0, sizeof(buffer));
             int n = read(entry.fd_, buffer, sizeof(buffer));
@@ -136,7 +125,6 @@ namespace yesdb {
                 return false;
             }
             if (n > 0) {
-                printf("read %d bytes.\n", n);
                 // deserialize
                 int pos = 0;
                 uint32_t tstamp;
@@ -152,7 +140,6 @@ namespace yesdb {
                 memcpy(&value_sz, buffer + pos, uint32_sz);
                 pos += uint32_sz;
 
-
                 std::string key;
                 char temp_key[BUFSIZ];
                 char temp_value[BUFSIZ];
@@ -160,16 +147,6 @@ namespace yesdb {
                 pos += key_sz;
                 memcpy(temp_value, buffer + pos, value_sz);
                 pos += value_sz;
-                /*
-                std::cout << "=================>" << std::endl;
-                std::cout << "checksum = " << checksum << std::endl;
-                std::cout << "tstam = " << tstamp << std::endl;
-                std::cout << "key_sz = " << key_sz << std::endl;
-                std::cout << "value_sz = " << value_sz << std::endl;
-                std::cout << "key = " << std::string(temp_key) << std::endl;
-                std::cout << "value = " << std::string(temp_value) << std::endl;
-                std::cout << "=================>" << std::endl;
-                 */
                 uint32_t new_checksum = crc32_checksum(buffer + uint32_sz,
                                                        pos - uint32_sz);
                 assert(new_checksum == checksum);
@@ -191,7 +168,7 @@ namespace yesdb {
                          std::vector<char> &cmpr_data,
                          int &cmpr_size) {
         size_t compressedBufferSize = ZSTD_compressBound(
-                originalData.size()); // 估算压缩后的缓冲区大小
+                originalData.size());
         std::vector<char> compressedBuffer(compressedBufferSize);
 
         size_t compressedSize = ZSTD_compress(
