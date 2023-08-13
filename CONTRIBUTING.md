@@ -32,8 +32,8 @@ As an open-source-oriented basic database system, yesdb should be designed and d
 |                                        | chore                                             | Integration and deployment-related submissions.     |
 | module（in lowercase）                   | coordinator                                       | Metadata management and storage-related.            |
 |                                        | storage                                           | storage enigne.                                     |
-|                                        | sql                                               | query enigne                                        |
+|                                        | sql                                               | query enigne.                                       |
 |                                        | deploy                                            | Script-related.                                     |
 |                                        | common                                            | Basic modules, such as cmake-related changes.       |
-|                                        | optimizer                                         | CBO or RBO                                          |
-| description (capitalized first letter) | Description of modifications made in this commit, |                                                     |
+|                                        | optimizer                                         | CBO or RBO.                                         |
+| description (capitalized first letter) | Description of modifications made in this commit. |                                                     |
