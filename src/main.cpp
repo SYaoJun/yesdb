@@ -7,18 +7,16 @@
 #define DB_NAME "yaojun.db"
 
 using namespace yesdb;
-int main()
-{
+
+int main() {
     plog::init(plog::debug, XLOG);
-    PLOG_DEBUG << "Hello log!"; // long macro
-    PLOG_DEBUG << "I am ready!";
     crow::SimpleApp app;
     Yesdb yesdb_instance(DB_NAME);
     yesdb_instance.Open();
-    yesdb_instance.Put("yaojun", "yysd!");
-    CROW_ROUTE(app, "/yaojun")([&yesdb_instance](){
-        std::string value = "hello yesdb!";
-        yesdb_instance.Get("yaojun", value);
+    yesdb_instance.Put("yesdb", "welcome to the magic world!\n");
+    CROW_ROUTE(app, "/yesdb")([&yesdb_instance]() {
+        std::string value = "hello yesdb!\n";
+        yesdb_instance.Get("yesdb", value);
         return value;
     });
 

@@ -22,7 +22,8 @@
 cd yesdb
 cmake -B build
 cmake --build build
-./test/server_test
+./src/yesdb_server
+curl http://0.0.0.0:18080/yesdb
 ```
 ## Physical Data Layout
 ```c
