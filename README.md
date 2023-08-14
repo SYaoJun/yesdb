@@ -17,6 +17,14 @@
 * [Picobench](https://github.com/iboB/picobench)
 * [Adaptive Radix Tree](https://github.com/rafaelkallis/adaptive-radix-tree)
 * [Plog](https://github.com/SergiusTheBest/plog)
+## Install Dependency
+ART no need install
+```
+# Catch2
+git clone https://github.com/catchorg/Catch2.git
+cd Catch2 && cmake -B build && cmake --build build && cd build && sudo make install
+# Other dependency similar
+```
 ## How to Run
 ```
 cd yesdb
