@@ -2,6 +2,8 @@
 
 #include <string>
 #include <ctime>
+#include <cstdint>
+#include <memory>
 namespace yesdb {
 
 uint32_t timestamp();

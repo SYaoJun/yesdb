@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
+#include <vector>
 namespace yesdb {
     class Entry {
     public:
