@@ -1,18 +1,19 @@
  cmake_minimum_required(VERSION 3.16)
-
  set(CMAKE_CXX_STANDARD 17)
-
- include_directories(/Users/yaojun/MyInstall/catch_install/include)
- include_directories(/opt/homebrew/Cellar/zstd/1.5.5/include)
- find_library(CATCH2_LIBS Catch2 /Users/yaojun/MyInstall/catch_install/lib REQUIRED)
- find_library(CATCH2MAIN_LIBS Catch2Main /Users/yaojun/MyInstall/catch_install/lib REQUIRED)
- find_library(ZSTD_LIBS zstd /opt/homebrew/Cellar/zstd/1.5.5/lib REQUIRED)
- file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_LIST_DIR}/*.cpp")
-# art
+ # art
  include_directories(../third_party/art)
-  include_directories(../third_party/art/art)
- #picobench
+ include_directories(../third_party/art/art)
+ # picobench
  include_directories(../third_party/picobench)
+ # common header
+ include_directories(/usr/local/include)
+
+ find_library(CATCH2_LIBS Catch2 /usr/local/include REQUIRED)
+ find_library(CATCH2MAIN_LIBS Catch2Main /usr/local/lib REQUIRED)
+ find_library(ZSTD_LIBS zstd /usr/local/lib REQUIRED)
+
+ file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_LIST_DIR}/*.cpp")
+
 
  foreach (test_source ${SRC_FILES})
      get_filename_component(test_filename ${test_source} NAME)
