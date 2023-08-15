@@ -7,6 +7,7 @@ set(YESDB_LIBS
         yesdb_storage
         )
 
+
 find_package(Threads REQUIRED)
 # crc32c
 find_library(CRC_LIBS NAMES crc32c PATHS /urs/local/lib REQUIRED)
