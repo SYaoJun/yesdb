@@ -1,12 +1,14 @@
  cmake_minimum_required(VERSION 3.16)
  set(CMAKE_CXX_STANDARD 17)
+ # common header
+ include_directories(/usr/local/include)
  # art
  include_directories(../third_party/art)
  include_directories(../third_party/art/art)
  # picobench
  include_directories(../third_party/picobench)
- # common header
- include_directories(/usr/local/include)
+ # spdlog
+ include_directories(../third_party/spdlog/*)
 
  find_library(CATCH2_LIBS Catch2 /usr/local/include REQUIRED)
  find_library(CATCH2MAIN_LIBS Catch2Main /usr/local/lib REQUIRED)
