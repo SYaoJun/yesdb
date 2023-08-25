@@ -9,22 +9,26 @@
  include_directories(../third_party/picobench)
  # spdlog
  include_directories(../third_party/spdlog/*)
+ # google test
+ include(FetchContent)
+ FetchContent_Declare(
+         googletest
+         GIT_REPOSITORY https://github.com/google/googletest.git
+         GIT_TAG v1.14.0
+ )
+ FetchContent_MakeAvailable(googletest)
 
- find_library(CATCH2_LIBS Catch2 /usr/local/include REQUIRED)
- find_library(CATCH2MAIN_LIBS Catch2Main /usr/local/lib REQUIRED)
- find_library(ZSTD_LIBS zstd /usr/local/lib REQUIRED)
-
+ # source file
  file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_LIST_DIR}/*.cpp")
 
-
+ # test unit
  foreach (test_source ${SRC_FILES})
      get_filename_component(test_filename ${test_source} NAME)
      string(REPLACE ".cpp" "" test_name ${test_filename})
      message(STATUS, " test file = ${test_name}")
      add_executable(${test_name} ${test_source})
      target_link_libraries(${test_name}
-             ${CATCH2_LIBS}
-             ${CATCH2MAIN_LIBS}
              ${ZSTD_LIBS}
+             gtest_main
              yesdb)
  endforeach ()
