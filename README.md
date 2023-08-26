@@ -2,14 +2,14 @@
 
 - A storage engine for study
 
-## Features
+# Features
 
-* Builtin server (`yesdb-server`)
-* Predictable read/write performance
-* Low latency
-* High throughput
+- Builtin server (`yesdb-server`)
+- Predictable read/write performance
+- Low latency
+- High throughput
 
-## Benchmark
+# Benchmark
 
 ```
 ===============================================================================
@@ -21,19 +21,18 @@
 ===============================================================================
 ```
 
-## Dependency
+# Dependency
 
-* [Catch2](https://github.com/catchorg/Catch2)
-* [CRC32](https://github.com/google/crc32c)
-* [Zstd](https://github.com/facebook/zstd)
-* [Picobench](https://github.com/iboB/picobench)
-* [Adaptive Radix Tree](https://github.com/rafaelkallis/adaptive-radix-tree)
-* [Plog](https://github.com/SergiusTheBest/plog)
+- [Catch2](https://github.com/catchorg/Catch2)
+- [CRC32](https://github.com/google/crc32c)
+- [Zstd](https://github.com/facebook/zstd)
+- [Picobench](https://github.com/iboB/picobench)
+- [Adaptive Radix Tree](https://github.com/rafaelkallis/adaptive-radix-tree)
+- [Plog](https://github.com/SergiusTheBest/plog)
 
-## Install Dependency
+# Install Dependency
 
-The dependency install in `/usr/local/` for default, otherwise you need change
-include path. ART no need to install
+The dependency install in `/usr/local/` for default, otherwise you need change include path. ART no need to install
 
 ```
 # Catch2
@@ -42,17 +41,15 @@ cd Catch2 && cmake -B build && cmake --build build && cd build && sudo make inst
 # Other dependency similar
 ```
 
-## How to Run
+# How to Run
 
 ```
 cd yesdb
 cmake -B build
 cmake --build build
-./src/yesdb_server
-curl http://0.0.0.0:18080/yesdb
 ```
 
-## Physical Data Layout
+# Physical Data Layout
 
 ```c
 /*
@@ -62,13 +59,13 @@ curl http://0.0.0.0:18080/yesdb
 */
 ```
 
-## TODO 2023.8
+# TODO 2023.8
 
 - Wal
 - Index
 - Recovery
 
-## Done
+# Done
 
 - Read
 - Write
