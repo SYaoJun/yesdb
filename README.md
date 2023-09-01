@@ -1,7 +1,7 @@
 [中文版](README_cn.md)
 
-https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml/badge.svg
-
+[]
+[![Ubuntu](https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml)
 ![yesdb](/logo/yesdb2.png)
 
 # yesdb
