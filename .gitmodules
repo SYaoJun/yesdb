@@ -1,0 +1,9 @@
+[submodule "contrib/crc32c"]
+	path = contrib/crc32c
+	url = https://gitee.com/kiritoxkiriko/crc32c.git
+[submodule "contrib/zstd"]
+	path = contrib/zstd
+	url = https://gitee.com/avgo/zstd.git
+[submodule "contrib/googletest"]
+	path = contrib/googletest
+	url = https://gitee.com/mirrors/googletest.git

@@ -1,5 +1,5 @@
 #include "common.h"
-#include "crc32c/crc32c.h"
+#include <crc32c/crc32c.h>
 
 namespace yesdb {
 
