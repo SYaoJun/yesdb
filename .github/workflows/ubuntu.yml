@@ -24,7 +24,7 @@ jobs:
       run: mkdir build && cd build && cmake ..
 
     - name: build
-      run: make -j 2
+      run: cd build && make -j 2
 
     - name: test
       run: cd build && ctest --output-on-failure -j 2
