@@ -3,9 +3,9 @@
 
 #  include(crc32c)
 #  include(zstd)
-find_library(GTEST_LIBRARIES gtest ${THIRD_PARTY_PATH}/install/googletest/lib)
-find_library(GTEST_MAIN_LIBRARIES gtest_main ${THIRD_PARTY_PATH}/install/googletest/lib)
-include_directories(${THIRD_PARTY_PATH}/install/googletest/include)
+find_library(GTEST_LIBRARIES gtest ../build/hird_party/install/googletest/lib)
+find_library(GTEST_MAIN_LIBRARIES gtest_main ../build/hird_party/install/googletest/lib)
+include_directories(../build/hird_party/install/googletest/include)
  # bin
  add_executable(gtest_test third_party/gtest_test.cpp)
 #  add_executable(crc32c_test third_party/crc32c_test.cpp)
