@@ -1,6 +1,5 @@
 
 #include "server.h"
-#include <plog/Log.h>
 #include <vector>
 #include "common.h"
 #include "zstd.h"
@@ -19,17 +18,15 @@ Yesdb::~Yesdb() {}
 bool Yesdb::Open() {
     fd_ = open(filename_.data(), O_RDWR | O_CREAT);
     if (fd_ == -1) {
-        PLOG_DEBUG << "can not open the file\n";
         return false;
     }
-    PLOG_DEBUG << "successful to open the file\n";
+
     offset_ = 0;
     return true;
 }
 
 bool Yesdb::Put(const std::string key, const std::string value) {
     if (fd_ == -1) {
-        PLOG_DEBUG << "file don't open.\n";
         return false;
     }
     std::unique_lock lock(mutex);
@@ -61,7 +58,6 @@ bool Yesdb::Put(const std::string key, const std::string value) {
     lseek(fd_, offset_, SEEK_SET);
     int ret = write(fd_, sup_buffer, new_pos);
     if (ret < 0) {
-        PLOG_DEBUG << "write failed.\n";
         return false;
     }
 
@@ -75,12 +71,10 @@ Entry::Entry(int fd, int offset, int size) : fd_(fd), offset_(offset), size_(siz
 
 bool Yesdb::Get(const std::string key, std::string &value) {
     if (fd_ == -1) {
-        PLOG_DEBUG << "file don't open.\n";
         return false;
     }
 
     if (key_dir.find(key) == key_dir.end()) {
-        PLOG_DEBUG << str_format("db don't exist the key = %s.\n", key.data());
         return false;
     }
     Entry entry = key_dir[key];
@@ -90,10 +84,9 @@ bool Yesdb::Get(const std::string key, std::string &value) {
 bool Yesdb::Flush() {
     int res = write(fd_, data_.data(), data_.size());
     if (res == -1) {
-        PLOG_DEBUG << "write error";
         return false;
     }
-    PLOG_DEBUG << str_format("success write %d bytes\n", res);
+
     return true;
 }
 
@@ -109,7 +102,6 @@ bool Yesdb::Close() {
 
 bool Yesdb::ReadData(Entry entry, std::string &value) {
     if (entry.fd_ == -1) {
-        PLOG_DEBUG << "file don't open.\n";
         return false;
     }
     char buffer[BUFSIZ];

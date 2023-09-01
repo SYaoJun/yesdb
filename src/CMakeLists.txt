@@ -7,21 +7,9 @@ set(YESDB_LIBS
         yesdb_storage
         )
 
-
-find_package(Threads REQUIRED)
-# crc32c
-find_library(CRC_LIBS NAMES crc32c PATHS /urs/local/lib REQUIRED)
-# zstd
-find_library(ZSTD_LIBS zstd /opt/homebrew/Cellar/zstd/1.5.5/lib REQUIRED)
-
 target_link_libraries(
         yesdb
         ${YESDB_LIBS}
-        Threads::Threads
-        ${CRC_LIBS}
-        ${ZSTD_LIBS}
+        ${CRC32C_LIBRARIES}
+        ${ZSTD_LIBRARIES}
 )
-
-
-add_executable(yesdb_server main.cpp)
-target_link_libraries(yesdb_server PRIVATE yesdb)
