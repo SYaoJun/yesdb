@@ -1,3 +1,7 @@
+[中文版](README_cn.md)
+
+[![Build](https://github.com/syaojun/yesdb/actions/workflows/yesdb.yml/badge.svg)](https://github.com/syaojun/yesdb/actions/workflows/yesdb.yml)
+
 ![yesdb](/logo/yesdb2.png)
 
 - A storage engine for study
