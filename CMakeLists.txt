@@ -18,8 +18,10 @@ include_directories(${PROJECT_SOURCE_DIR}/third_party)
 include(gtest)
 #  include(crc32c)
 #  include(zstd)
+find_library(GTEST_LIBRARIES gtest ${THIRD_PARTY_PATH}/install/googletest/lib)
+find_library(GTEST_MAIN_LIBRARIES gtest_main ${THIRD_PARTY_PATH}/install/googletest/lib)
+include_directories(${THIRD_PARTY_PATH}/install/googletest/include)
  # headers 
- include_directories(${GTEST_INCLUDE_DIR})
 #  include_directories(${CRC32C_INCLUDE_DIR})
 #  include_directories(${ZSTD_INCLUDE_DIR})
 
