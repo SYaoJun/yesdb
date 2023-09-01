@@ -16,12 +16,12 @@ include_directories(${PROJECT_SOURCE_DIR}/src/include)
 include_directories(${PROJECT_SOURCE_DIR}/third_party)
 
 include(gtest)
- include(crc32c)
- include(zstd)
+#  include(crc32c)
+#  include(zstd)
  # headers 
  include_directories(${GTEST_INCLUDE_DIR})
- include_directories(${CRC32C_INCLUDE_DIR})
- include_directories(${ZSTD_INCLUDE_DIR})
+#  include_directories(${CRC32C_INCLUDE_DIR})
+#  include_directories(${ZSTD_INCLUDE_DIR})
 
-add_subdirectory(src)
+# add_subdirectory(src)
 add_subdirectory(test)
