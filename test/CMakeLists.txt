@@ -1,7 +1,6 @@
  cmake_minimum_required(VERSION 3.5)
  set(CMAKE_CXX_STANDARD 17)
- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
- include(gtest)
+
 #  include(crc32c)
 #  include(zstd)
 find_library(GTEST_LIBRARIES gtest ${THIRD_PARTY_PATH}/install/googletest/lib)
