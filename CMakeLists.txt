@@ -15,15 +15,13 @@ set(THIRD_PARTY_PATH ${CMAKE_CURRENT_BINARY_DIR}/third-party)
 include_directories(${PROJECT_SOURCE_DIR}/src/include)
 include_directories(${PROJECT_SOURCE_DIR}/third_party)
 
-include(gtest)
+# include(gtest)
 #  include(crc32c)
 #  include(zstd)
-find_library(GTEST_LIBRARIES gtest ${THIRD_PARTY_PATH}/install/googletest/lib)
-find_library(GTEST_MAIN_LIBRARIES gtest_main ${THIRD_PARTY_PATH}/install/googletest/lib)
-include_directories(${THIRD_PARTY_PATH}/install/googletest/include)
- # headers 
+# headers 
 #  include_directories(${CRC32C_INCLUDE_DIR})
 #  include_directories(${ZSTD_INCLUDE_DIR})
 
 # add_subdirectory(src)
-add_subdirectory(test)
+# add_subdirectory(test)
+add_executable(main test/main.cpp)
