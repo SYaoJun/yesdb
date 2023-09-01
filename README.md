@@ -4,16 +4,30 @@
 
 ![yesdb](/logo/yesdb2.png)
 
-- A storage engine for study
+# yesdb
 
-# Features
+- 一个基于Bitcask的KV存储引擎
 
-- Builtin server (`yesdb-server`)
-- Predictable read/write performance
-- Low latency
-- High throughput
+## 编译说明
 
-# Benchmark
+- 要求C++17
+- 所有第三方都是采用源码编译
+
+## 关键特性
+
+- 高性能
+
+  - 追加写数据
+  - 数据分层冷温热
+  - 布隆过滤器和BITMAP索引
+  - RDMA
+
+- 低成本
+
+  - 采用ZSTD压缩
+  - 适配S3对象存储
+
+## 性能测试
 
 ```
 ===============================================================================
@@ -25,7 +39,7 @@
 ===============================================================================
 ```
 
-# Dependency
+## 依赖包
 
 - [Catch2](https://github.com/catchorg/Catch2)
 - [CRC32](https://github.com/google/crc32c)
@@ -34,26 +48,21 @@
 - [Adaptive Radix Tree](https://github.com/rafaelkallis/adaptive-radix-tree)
 - [Plog](https://github.com/SergiusTheBest/plog)
 
-# Install Dependency
+## 编译
 
-The dependency install in `/usr/local/` for default, otherwise you need change include path. ART no need to install
-
-```
-# Catch2
-git clone https://github.com/catchorg/Catch2.git
-cd Catch2 && cmake -B build && cmake --build build && cd build && sudo make install
-# Other dependency similar
-```
-
-# How to Run
-
-```
+```console
 cd yesdb
 cmake -B build
 cmake --build build
 ```
 
-# Physical Data Layout
+## 运行
+
+```console
+./test/db_bench
+```
+
+## 数据模型
 
 ```c
 /*
@@ -63,21 +72,8 @@ cmake --build build
 */
 ```
 
-# TODO 2023.8
+## 待完成
 
 - Wal
 - Index
 - Recovery
-
-# Done
-
-- Read
-- Write
-- Serialize
-- Deserialize
-- Compress
-- Decompress
-- DBServer
-- Log
-- ART
-- Benchmark
