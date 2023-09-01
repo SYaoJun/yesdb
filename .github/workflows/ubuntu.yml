@@ -1,8 +1,6 @@
-name: Unbuntu_CI
+name: unbuntu
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
