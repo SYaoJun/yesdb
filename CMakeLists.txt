@@ -12,6 +12,8 @@ include_directories(${PROJECT_SOURCE_DIR}/src/include)
 include_directories(${PROJECT_SOURCE_DIR}/third_party)
 enable_testing()
 include(gtest)
+find_package(Threads REQUIRED)
+include_directories(${GTEST_INCLUDE_DIR})
 #  include(crc32c)
 #  include(zstd)
 set(DYNAMIC_LIB
@@ -33,4 +35,4 @@ add_dependencies(gtest_test ${DEPEND_LIBS})
 
 target_link_libraries(gtest_test ${DYNAMIC_LIB})
 
-add_test(NAME mytest COMMAND $<TARGET_FILE: gtest_test>)
+add_test(NAME mytest COMMAND $<TARGET_FILE:gtest_test>)
