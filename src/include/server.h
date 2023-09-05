@@ -27,10 +27,10 @@ class Entry {
     int size_;
 };
 
-class Yesdb {
+class DBImpl {
    public:
-    Yesdb(std::string filename);
-    ~Yesdb();
+    DBImpl(std::string filename);
+    ~DBImpl();
     bool Open();
     bool Close();
 
@@ -39,20 +39,26 @@ class Yesdb {
     bool Flush();
 
     bool Sync();
-    bool Compress(const std::string org_data, std::vector<char> &cmpr_data, int &cmpr_size);
-    bool Decompress(std::vector<char> &cmpr_data, std::string &decmpr_data, const int cmpr_size, const int org_size);
+    // bool Compress(const std::string org_data, std::vector<char> &cmpr_data, int &cmpr_size);
+    // bool Decompress(std::vector<char> &cmpr_data, std::string &decmpr_data, const int cmpr_size, const int org_size);
+
+    void LoadIndex();
+    void AutoMerge();
 
    private:
     std::string filename_;
     int fd_;
     int offset_;
     std::string data_;
+    int max_file_no_;
     std::unordered_map<std::string, Entry> key_dir;
     std::shared_mutex mutex;
-    inline static const char *TOMBSTONE = "YESDB_TOMBSTONE_VALUE";
+    inline static const char *TOMBSTONE = "yesdb_TOMBSTONE_VALUE";
 
     bool ReadData(Entry entry, std::string &value);
     bool Serialize();
     bool Deserialize();
 };
+
+enum Option { PUT = 0, GET, DELTE, SCAN };
 }  // namespace yesdb

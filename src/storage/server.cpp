@@ -1,9 +1,11 @@
 
 #include "server.h"
-#include <zstd.h>
+// #include <zstd.h>
+#include <chrono>
+#include <thread>
 #include <vector>
 #include "common.h"
-
+using namespace std::chrono_literals;
 /*
  * +-------+--------+--------+----------+-----+-------+
  * | crc32 | tstamp | key_sz | value_sz | key | value |
@@ -11,11 +13,11 @@
  */
 
 namespace yesdb {
-Yesdb::Yesdb(std::string filename) : filename_(filename) {}
+DBImpl::DBImpl(std::string filename) : filename_(filename) {}
 
-Yesdb::~Yesdb() {}
+DBImpl::~DBImpl() {}
 
-bool Yesdb::Open() {
+bool DBImpl::Open() {
     fd_ = open(filename_.data(), O_RDWR | O_CREAT);
     if (fd_ == -1) {
         return false;
@@ -25,7 +27,7 @@ bool Yesdb::Open() {
     return true;
 }
 
-bool Yesdb::Put(const std::string key, const std::string value) {
+bool DBImpl::Put(const std::string key, const std::string value) {
     if (fd_ == -1) {
         return false;
     }
@@ -69,7 +71,7 @@ bool Yesdb::Put(const std::string key, const std::string value) {
 
 Entry::Entry(int fd, int offset, int size) : fd_(fd), offset_(offset), size_(size) {}
 
-bool Yesdb::Get(const std::string key, std::string &value) {
+bool DBImpl::Get(const std::string key, std::string &value) {
     if (fd_ == -1) {
         return false;
     }
@@ -81,7 +83,7 @@ bool Yesdb::Get(const std::string key, std::string &value) {
     return ReadData(entry, value);
 }
 
-bool Yesdb::Flush() {
+bool DBImpl::Flush() {
     int res = write(fd_, data_.data(), data_.size());
     if (res == -1) {
         return false;
@@ -90,17 +92,32 @@ bool Yesdb::Flush() {
     return true;
 }
 
-bool Yesdb::Sync() {
+bool DBImpl::Sync() {
     int ret = fsync(fd_);
     return ret == -1 ? false : true;
 }
 
-bool Yesdb::Close() {
+bool DBImpl::Close() {
     close(fd_);
     return true;
 }
 
-bool Yesdb::ReadData(Entry entry, std::string &value) {
+void DBImpl::AutoMerge() {
+    std::function<void()> merge = [&]() {
+        while (true) {
+            // std::this_thread::sleep_for(5);
+            // TODO
+            for (int i = 0; i < this->max_file_no_; i++) {
+            }
+        }
+    };
+    std::thread th(merge);
+    th.join();
+}
+void DBImpl::LoadIndex() {
+    // TODO
+}
+bool DBImpl::ReadData(Entry entry, std::string &value) {
     if (entry.fd_ == -1) {
         return false;
     }
@@ -147,37 +164,37 @@ bool Yesdb::ReadData(Entry entry, std::string &value) {
     }
 }
 
-bool Yesdb::Serialize() { return false; }
+bool DBImpl::Serialize() { return false; }
 
-bool Yesdb::Deserialize() { return false; }
+bool DBImpl::Deserialize() { return false; }
 
-bool Yesdb::Compress(const std::string originalData, std::vector<char> &cmpr_data, int &cmpr_size) {
-    size_t compressedBufferSize = ZSTD_compressBound(originalData.size());
-    std::vector<char> compressedBuffer(compressedBufferSize);
+// bool DBImpl::Compress(const std::string originalData, std::vector<char> &cmpr_data, int &cmpr_size) {
+//     size_t compressedBufferSize = ZSTD_compressBound(originalData.size());
+//     std::vector<char> compressedBuffer(compressedBufferSize);
 
-    size_t compressedSize = ZSTD_compress(compressedBuffer.data(), compressedBuffer.size(), originalData.data(),
-                                          originalData.size(), ZSTD_maxCLevel());
-    if (ZSTD_isError(compressedSize)) {
-        std::cerr << "Compression error: " << ZSTD_getErrorName(compressedSize) << std::endl;
-        return false;
-    }
-    cmpr_data = compressedBuffer;
-    cmpr_size = compressedSize;
-    return true;
-}
+//     size_t compressedSize = ZSTD_compress(compressedBuffer.data(), compressedBuffer.size(), originalData.data(),
+//                                           originalData.size(), ZSTD_maxCLevel());
+//     if (ZSTD_isError(compressedSize)) {
+//         std::cerr << "Compression error: " << ZSTD_getErrorName(compressedSize) << std::endl;
+//         return false;
+//     }
+//     cmpr_data = compressedBuffer;
+//     cmpr_size = compressedSize;
+//     return true;
+// }
 
-bool Yesdb::Decompress(std::vector<char> &cmpr_data, std::string &decmpr_data, const int cmpr_size,
-                       const int org_size) {
-    std::vector<char> decompressedBuffer(org_size);
-    size_t decompressedSize =
-        ZSTD_decompress(decompressedBuffer.data(), decompressedBuffer.size(), cmpr_data.data(), cmpr_size);
+// bool DBImpl::Decompress(std::vector<char> &cmpr_data, std::string &decmpr_data, const int cmpr_size,
+//                        const int org_size) {
+//     std::vector<char> decompressedBuffer(org_size);
+//     size_t decompressedSize =
+//         ZSTD_decompress(decompressedBuffer.data(), decompressedBuffer.size(), cmpr_data.data(), cmpr_size);
 
-    if (ZSTD_isError(decompressedSize)) {
-        std::cerr << "Decompression error: " << ZSTD_getErrorName(decompressedSize) << std::endl;
-        return false;
-    }
-    decmpr_data = std::move(decompressedBuffer.data());
-    return true;
-}
+//     if (ZSTD_isError(decompressedSize)) {
+//         std::cerr << "Decompression error: " << ZSTD_getErrorName(decompressedSize) << std::endl;
+//         return false;
+//     }
+//     decmpr_data = std::move(decompressedBuffer.data());
+//     return true;
+// }
 
 }  // namespace yesdb
