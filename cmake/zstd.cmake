@@ -1,28 +1,25 @@
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(ZSTD_SOURCES_DIR ${THIRD_PARTY_PATH}/src/extern_zstd/)
-SET(ZSTD_INSTALL_DIR ${THIRD_PARTY_PATH}/install/zstd)
-
-set(ZSTD_MAKE cd ${ZSTD_SOURCES_DIR} && make) 
-set(ZSTD_INSTALL cd ${ZSTD_SOURCES_DIR} && make install prefix=${ZSTD_INSTALL_DIR})
-
-FILE(WRITE ${ZSTD_SOURCES_DIR}/src/copy_repo.sh
-        "mkdir -p ${ZSTD_SOURCES_DIR} && cp -rf ${CMAKE_SOURCE_DIR}/contrib/zstd/* ${ZSTD_SOURCES_DIR}")
-
-execute_process(COMMAND sh ${ZSTD_SOURCES_DIR}/src/copy_repo.sh)
+set(ZSTD_ROOT ${CMAKE_BINARY_DIR}/thirdparty/zstd)
+set(ZSTD_GIT_TAG v1.4.0)
+set(ZSTD_GIT_URL https://gitee.com/avgo/zstd.git)
+set(ZSTD_MAKE cd ${ZSTD_ROOT}/src/extern_zstd && make)
+set(ZSTD_INSTALL cd ${ZSTD_ROOT}/src/extern_zstd && make install
+                 prefix=${ZSTD_ROOT})
 
 ExternalProject_Add(
-        extern_zstd
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/contrib/zstd/
-        PREFIX ${ZSTD_INSTALL_DIR}
-        BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${ZSTD_MAKE}
-        INSTALL_COMMAND ${ZSTD_INSTALL}
-)
+  extern_zstd
+  PREFIX ${ZSTD_ROOT}
+  GIT_REPOSITORY ${ZSTD_GIT_URL}
+  GIT_TAG ${ZSTD_GIT_TAG}
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ${ZSTD_MAKE}
+  INSTALL_COMMAND ${ZSTD_INSTALL}
+  BUILD_BYPRODUCTS "")
 
-find_library(ZSTD_LIBRARIES zstd ${ZSTD_INSTALL_DIR}/lib)
-ADD_LIBRARY(zstd STATIC IMPORTED GLOBAL)
-SET_PROPERTY(TARGET zstd PROPERTY IMPORTED_LOCATION ${ZSTD_LIBRARIES})
-set(ZSTD_INCLUDE_DIR ${ZSTD_INSTALL_DIR}/include)
-ADD_DEPENDENCIES(zstd extern_zstd)
+find_library(ZSTD_LIBRARIES zstd ${ZSTD_ROOT}/lib/)
+set(ZSTD_INCLUDE_DIR ${ZSTD_ROOT}/include)
+
+add_library(zstd STATIC IMPORTED GLOBAL)
+set_property(TARGET zstd PROPERTY IMPORTED_LOCATION ${ZSTD_LIBRARIES})
+add_dependencies(zstd extern_zstd)

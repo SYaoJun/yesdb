@@ -9,7 +9,7 @@
 using namespace yesdb;
 
 static void put_test(picobench::state &s) {
-    Yesdb yesdb("yesdb.db");
+    yesdb yesdb("yesdb.db");
     yesdb.Open();
     for (auto _ : s) {
         std::string key = "yaojun" + std::to_string(rand());

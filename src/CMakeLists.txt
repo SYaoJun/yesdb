@@ -1,15 +1,13 @@
-add_subdirectory(storage)
-# collect all object files and generate static lib
-add_library(yesdb STATIC ${ALL_OBJECT_FILES})
+add_library(yesdb STATIC storage/common.cpp storage/server.cpp)
+find_package(Threads REQUIRED)
 
+set(LIBS ${ZSTD_LIBRARIES} ${CRC32C_LIBRARIES} Threads::Threads)
+set(DEPS zstd crc32c)
+set(INCLUDES ${CRC32C_INCLUDE_DIR} ${GTEST_INCLUDE_DIR} ${ZSTD_INCLUDE_DIR}
+             include/)
+target_link_libraries(yesdb PUBLIC ${LIBS})
+add_dependencies(yesdb ${DEPS})
+target_include_directories(yesdb PUBLIC ${INCLUDES})
 
-set(YESDB_LIBS
-        yesdb_storage
-        )
-
-target_link_libraries(
-        yesdb
-        ${YESDB_LIBS}
-        ${CRC32C_LIBRARIES}
-        ${ZSTD_LIBRARIES}
-)
+add_executable(db_server main.cpp)
+target_link_libraries(db_server PRIVATE yesdb)
