@@ -112,7 +112,6 @@ void DBImpl::AutoMerge() {
         }
     };
     std::thread th(merge);
-    th.join();
 }
 void DBImpl::LoadIndex() {
     // TODO
