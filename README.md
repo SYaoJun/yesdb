@@ -1,4 +1,4 @@
-[中文版](README_cn.md)
+[English](README_en.md)
 
 [![Ubuntu](https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml) ![yesdb](/logo/yesdb2.png)
 
@@ -45,7 +45,7 @@ cmake --build build
 ## 运行
 
 ```console
-./test/db_bench
+./bin/gtest_test
 ```
 
 ## 数据模型
