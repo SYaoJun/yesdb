@@ -8,22 +8,16 @@
 
 ## 编译说明
 
-- 要求C++17
-- 所有第三方都是采用源码编译
+- C++17
+- 所有第三方包都是采用源码编译
+- 已适配Ninja生成器
 
-## 关键特性
+  ## 关键特性
 
-- 高性能
+- 读
 
-  - 追加写数据
-  - 数据分层冷温热
-  - 布隆过滤器和BITMAP索引
-  - RDMA
-
-- 低成本
-
-  - 采用ZSTD压缩
-  - 适配S3对象存储
+- 写
+- 合并
 
 ## 性能测试
 
@@ -39,17 +33,11 @@
 
 ## 依赖包
 
-- [Catch2](https://github.com/catchorg/Catch2)
-- [CRC32](https://github.com/google/crc32c)
-- [Zstd](https://github.com/facebook/zstd)
-- [Picobench](https://github.com/iboB/picobench)
-- [Adaptive Radix Tree](https://github.com/rafaelkallis/adaptive-radix-tree)
-- [Plog](https://github.com/SergiusTheBest/plog)
+- 依赖包都在cmake目录下，有对应的源码链接。
 
 ## 编译
 
 ```console
-git submodule update --init --recursive
 cmake -B build
 cmake --build build
 ```
@@ -69,9 +57,3 @@ cmake --build build
 * +-------+--------+--------+----------+-----+-------+
 */
 ```
-
-## 待完成
-
-- Wal
-- Index
-- Recovery
