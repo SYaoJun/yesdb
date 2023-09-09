@@ -1,6 +1,6 @@
 [English](README_en.md)
 
-<!-- [![Ubuntu](https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/syaojun/yesdb/actions/workflows/ubuntu.yml) --> ![yesdb](/logo/yesdb2.png)
+![yesdb](/logo/yesdb2.png)
 
 # yesdb
 
